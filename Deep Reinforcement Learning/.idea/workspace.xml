@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9b188c25-7faf-4185-a534-6550e5630f8e" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/Pytorch Implementations/DDPG/ddpg_agent.py" afterPath="$PROJECT_DIR$/Pytorch Implementations/DDPG/ddpg_agent.py" />
-      <change beforePath="$PROJECT_DIR$/Pytorch Implementations/DQN/__init__.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Pytorch Implementations/DQN/dqn_agent.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Pytorch Implementations/DQN/dqn_agent_network.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Pytorch Implementations/DQN/replay_memory.py" afterPath="" />
-      <change beforePath="$PROJECT_DIR$/Pytorch Implementations/DQN/utils.py" afterPath="" />
-    </list>
+    <list default="true" id="9b188c25-7faf-4185-a534-6550e5630f8e" name="Default" comment="" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -169,11 +162,6 @@
             <path>
               <item name="Deep Reinforcement Learning" type="b2602c69:ProjectViewProjectNode" />
               <item name="Deep Reinforcement Learning" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="Deep Reinforcement Learning" type="b2602c69:ProjectViewProjectNode" />
-              <item name="Deep Reinforcement Learning" type="462c0819:PsiDirectoryNode" />
-              <item name="Pytorch Implementations" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />

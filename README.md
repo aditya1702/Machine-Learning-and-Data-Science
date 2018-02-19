@@ -91,5 +91,4 @@ I have implemented many major algorithms from the Sutton and Barto book and curr
 - [Asynchronous Advantage Actor-Critic (A3C)](https://github.com/aditya1702/Machine-Learning-and-Data-Science/tree/master/Deep%20Reinforcement%20Learning/Pytorch%20Implementations/A3C)
 - [Single-Agent Synchronous Advantage Actor-Critic (A2C)](https://github.com/aditya1702/Machine-Learning-and-Data-Science/tree/master/Deep%20Reinforcement%20Learning/Pytorch%20Implementations/A2C)
 - [Multi-Agent Synchronous Advantage Actor-Critic (Multi A2C)](https://github.com/aditya1702/Machine-Learning-and-Data-Science/tree/master/Deep%20Reinforcement%20Learning/Pytorch%20Implementations/A2CMulti)
-
-
+- [Trust Region Policy Optimization (TRPO) (In Progress)](https://github.com/aditya1702/Machine-Learning-and-Data-Science/tree/master/Deep%20Reinforcement%20Learning/Pytorch%20Implementations/TRPO)
