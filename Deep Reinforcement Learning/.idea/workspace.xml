@@ -2,11 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9b188c25-7faf-4185-a534-6550e5630f8e" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/Pytorch Implementations/A2C/a2c.py" afterPath="$PROJECT_DIR$/Pytorch Implementations/A2C/a2c.py" />
-      <change beforePath="$PROJECT_DIR$/Pytorch Implementations/A2CMulti/a2c_multi.py" afterPath="$PROJECT_DIR$/Pytorch Implementations/A2CMulti/a2c_multi.py" />
-      <change beforePath="$PROJECT_DIR$/Pytorch Implementations/A3C/a3c_worker.py" afterPath="$PROJECT_DIR$/Pytorch Implementations/A3C/a3c_worker.py" />
+      <change beforePath="$PROJECT_DIR$/Pytorch Implementations/DDPG/actor_network.py" afterPath="$PROJECT_DIR$/Pytorch Implementations/DDPG/actor_network.py" />
       <change beforePath="$PROJECT_DIR$/Pytorch Implementations/DDPG/ddpg_agent.py" afterPath="$PROJECT_DIR$/Pytorch Implementations/DDPG/ddpg_agent.py" />
-      <change beforePath="$PROJECT_DIR$/Pytorch Implementations/TRPO/trpo_main.py" afterPath="$PROJECT_DIR$/Pytorch Implementations/TRPO/trpo_main.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -20,8 +17,8 @@
       <file leaf-file-name="application.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Pytorch Implementations/application.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="34" column="40" lean-forward="true" selection-start-line="34" selection-start-column="40" selection-end-line="34" selection-end-column="40" />
+            <state relative-caret-position="690">
+              <caret line="46" column="38" lean-forward="true" selection-start-line="46" selection-start-column="38" selection-end-line="46" selection-end-column="38" />
               <folding>
                 <element signature="e#24#34#0" expanded="true" />
               </folding>
@@ -29,13 +26,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="a2c.py" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/Pytorch Implementations/A2C/a2c.py">
+      <file leaf-file-name="actor_network.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Pytorch Implementations/DDPG/actor_network.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1397">
-              <caret line="161" column="0" lean-forward="true" selection-start-line="161" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
+            <state relative-caret-position="345">
+              <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
               <folding>
-                <element signature="e#15#46#0" expanded="true" />
+                <element signature="e#0#21#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -59,10 +56,12 @@
       <find>optimize_model</find>
       <find>_optimize_model</find>
       <find>num_days_since_processing_info</find>
-      <find>_print_environment_info</find>
       <find>select_action</find>
       <find>_reverse_episode_storage_buffers</find>
       <find>_update_network_parameters</find>
+      <find>_print_environment_info</find>
+      <find>print_progress_after_number_of_days</find>
+      <find>num_days_after_which_to_process_info</find>
     </findStrings>
     <replaceStrings>
       <replace>_running_mean</replace>
@@ -123,12 +122,13 @@
         <option value="$PROJECT_DIR$/Pytorch Implementations/TRPO/replay_memory.py" />
         <option value="$PROJECT_DIR$/Pytorch Implementations/DDPG/utils.py" />
         <option value="$PROJECT_DIR$/Pytorch Implementations/DDPG/critic_network.py" />
-        <option value="$PROJECT_DIR$/Pytorch Implementations/DQN/dqn_agent.py" />
         <option value="$PROJECT_DIR$/Pytorch Implementations/A3C/shared_optimizer.py" />
         <option value="$PROJECT_DIR$/Pytorch Implementations/A3C/shared_network.py" />
         <option value="$PROJECT_DIR$/Pytorch Implementations/application.py" />
-        <option value="$PROJECT_DIR$/Pytorch Implementations/DDPG/ddpg_agent.py" />
         <option value="$PROJECT_DIR$/Pytorch Implementations/A2C/a2c.py" />
+        <option value="$PROJECT_DIR$/Pytorch Implementations/DQN/dqn_agent.py" />
+        <option value="$PROJECT_DIR$/Pytorch Implementations/DDPG/ddpg_agent.py" />
+        <option value="$PROJECT_DIR$/Pytorch Implementations/DDPG/actor_network.py" />
       </list>
     </option>
   </component>
@@ -192,7 +192,7 @@
               <item name="Deep Reinforcement Learning" type="b2602c69:ProjectViewProjectNode" />
               <item name="Deep Reinforcement Learning" type="462c0819:PsiDirectoryNode" />
               <item name="Pytorch Implementations" type="462c0819:PsiDirectoryNode" />
-              <item name="A2C" type="462c0819:PsiDirectoryNode" />
+              <item name="DDPG" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -476,16 +476,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/DDPG/actor_network.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-171">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#21#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Pytorch Implementations/TRPO/running_stats.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="810">
@@ -536,14 +526,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/DDPG/replay_memory.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Pytorch Implementations/DQN/utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="210">
@@ -560,14 +542,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/DQN/dqn_agent_network.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" column="100" lean-forward="false" selection-start-line="22" selection-start-column="100" selection-end-line="22" selection-end-column="100" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Pytorch Implementations/DQN/replay_memory.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -576,22 +550,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/DDPG/critic_network.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="24" column="67" lean-forward="false" selection-start-line="24" selection-start-column="67" selection-end-line="24" selection-end-column="67" />
-          <folding>
-            <element signature="e#0#12#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Pytorch Implementations/A2C/actor_critic_network.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
           <caret line="24" column="24" lean-forward="true" selection-start-line="24" selection-start-column="24" selection-end-line="24" selection-end-column="24" />
           <folding>
-            <element signature="e#0#21#0" expanded="true" />
+            <element signature="e#0#21#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -625,7 +589,7 @@
         <state relative-caret-position="9">
           <caret line="9" column="4" lean-forward="false" selection-start-line="9" selection-start-column="4" selection-end-line="9" selection-end-column="4" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -635,16 +599,8 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#0#18#0" expanded="true" />
+            <element signature="e#0#18#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/A3C/shared_network.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="189">
-          <caret line="24" column="41" lean-forward="false" selection-start-line="24" selection-start-column="41" selection-end-line="24" selection-end-column="41" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -652,30 +608,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="495">
           <caret line="36" column="67" lean-forward="true" selection-start-line="36" selection-start-column="67" selection-end-line="36" selection-end-column="67" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/TRPO/trpo_main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="379">
-          <caret line="114" column="12" lean-forward="false" selection-start-line="114" selection-start-column="12" selection-end-line="114" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/A3C/a3c_main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-382">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/A3C/a3c_worker.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1361">
-          <caret line="122" column="36" lean-forward="true" selection-start-line="122" selection-start-column="36" selection-end-line="122" selection-end-column="36" />
           <folding />
         </state>
       </provider>
@@ -688,40 +620,104 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/A3C/a3c_worker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1755">
+          <caret line="122" column="36" lean-forward="true" selection-start-line="122" selection-start-column="36" selection-end-line="122" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/A3C/a3c_main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Pytorch Implementations/DDPG/ddpg_agent.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="552">
-          <caret line="113" column="0" lean-forward="false" selection-start-line="113" selection-start-column="0" selection-end-line="113" selection-end-column="0" />
+        <state relative-caret-position="241">
+          <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/TRPO/trpo_main.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1530">
+          <caret line="114" column="12" lean-forward="false" selection-start-line="114" selection-start-column="12" selection-end-line="114" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/A2C/a2c.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2415">
+          <caret line="161" column="0" lean-forward="false" selection-start-line="161" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
           <folding>
-            <element signature="e#15#25#0" expanded="true" />
+            <element signature="e#15#46#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Pytorch Implementations/DQN/dqn_agent.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1222">
-          <caret line="92" column="42" lean-forward="true" selection-start-line="92" selection-start-column="42" selection-end-line="92" selection-end-column="42" />
+        <state relative-caret-position="241">
+          <caret line="46" column="0" lean-forward="false" selection-start-line="46" selection-start-column="0" selection-end-line="46" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Pytorch Implementations/application.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="34" column="40" lean-forward="true" selection-start-line="34" selection-start-column="40" selection-end-line="34" selection-end-column="40" />
+        <state relative-caret-position="690">
+          <caret line="46" column="38" lean-forward="true" selection-start-line="46" selection-start-column="38" selection-end-line="46" selection-end-column="38" />
           <folding>
             <element signature="e#24#34#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/A2C/a2c.py">
+    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/A3C/shared_network.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1397">
-          <caret line="161" column="0" lean-forward="true" selection-start-line="161" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
+        <state relative-caret-position="211">
+          <caret line="24" column="41" lean-forward="false" selection-start-line="24" selection-start-column="41" selection-end-line="24" selection-end-column="41" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/DDPG/critic_network.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="24" column="67" lean-forward="false" selection-start-line="24" selection-start-column="67" selection-end-line="24" selection-end-column="67" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/DDPG/replay_memory.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/DQN/dqn_agent_network.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="22" column="100" lean-forward="false" selection-start-line="22" selection-start-column="100" selection-end-line="22" selection-end-column="100" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/DDPG/actor_network.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="345">
+          <caret line="23" column="0" lean-forward="true" selection-start-line="23" selection-start-column="0" selection-end-line="23" selection-end-column="0" />
           <folding>
-            <element signature="e#15#46#0" expanded="true" />
+            <element signature="e#0#21#0" expanded="true" />
           </folding>
         </state>
       </provider>

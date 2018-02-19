@@ -39,14 +39,11 @@ class Ddpg:
                  actor = None,
                  critic = None,
                  number_of_episodes = DefaultNumberOfEpisodes,
-                 print_progress_after_number_of_days = DefaultNumberOfDaysToPrint,
                  plot_environment_statistics = False):
         self.number_of_steps_taken = 0
         self.number_of_parameter_updates = 0
         self.plot_environment_statistics = plot_environment_statistics
-        self.print_progress_after_number_of_days = print_progress_after_number_of_days
         self.total_reward_gained = 0
-        self.num_days_after_which_to_process_info = 0
         self.number_of_episodes = number_of_episodes
 
         self.reward_per_episode = dict()
