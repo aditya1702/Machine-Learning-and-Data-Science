@@ -84,7 +84,7 @@ class TRPO:
                 self.number_of_steps += (step-1)
                 self.episode_counter += 1
                 self.reward_per_episode[self.episode_counter] = self.total_reward_gained
-            self._update_network_parameters()
+            self._optimize_model()
 
     def _select_action(self, state):
         """
@@ -99,7 +99,7 @@ class TRPO:
         action = action.data.clamp(-1, 1)
         return action
 
-    def _update_network_parameters(self):
+    def _optimize_model(self):
         """
         This function optimizes the actor-critic neural network.
         """

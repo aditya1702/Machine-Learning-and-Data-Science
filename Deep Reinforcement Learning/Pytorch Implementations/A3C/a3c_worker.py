@@ -68,7 +68,7 @@ class A3CWorker(mp.Process):
                 if step == self.MaximumNumberOfEpisodeSteps - 1:
                     done = True
                 if self.total_number_of_steps % self.UpdateGlobalNetworkParamsStep == 0 or done:
-                    self._update_network_parameters(next_state = next_state, done = done)
+                    self._optimize_model(next_state = next_state, done = done)
                     self._reset_episode_storage_buffers()
 
                     if done:
@@ -96,7 +96,7 @@ class A3CWorker(mp.Process):
         action_value = normal_distribution.sample().numpy()
         return action_value
 
-    def _update_network_parameters(self, next_state, done):
+    def _optimize_model(self, next_state, done):
         """
         This function optimizes the local and global neural networks.
 

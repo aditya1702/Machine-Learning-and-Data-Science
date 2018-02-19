@@ -78,7 +78,7 @@ class A2CMultiAgent:
             # signals and no training will occur.
             self.done_list = np.resize(np.array(self.done_buffer), (self.MaximumNumberOfEpisodeSteps * self.NumberOfEnvironments))
             if True in self.done_list:
-                self._update_network_parameters()
+                self._optimize_model()
 
         print(self._test_model())
 
@@ -113,7 +113,7 @@ class A2CMultiAgent:
         discrete_actions = self.distribution(probs = action_probabilities).sample()
         return discrete_actions
 
-    def _update_network_parameters(self):
+    def _optimize_model(self):
         """
         This function optimizes the actor-critic neural network.
         """

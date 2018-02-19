@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="9b188c25-7faf-4185-a534-6550e5630f8e" name="Default" comment="" />
+    <list default="true" id="9b188c25-7faf-4185-a534-6550e5630f8e" name="Default" comment="">
+      <change beforePath="$PROJECT_DIR$/Pytorch Implementations/A2C/a2c.py" afterPath="$PROJECT_DIR$/Pytorch Implementations/A2C/a2c.py" />
+      <change beforePath="$PROJECT_DIR$/Pytorch Implementations/A2CMulti/a2c_multi.py" afterPath="$PROJECT_DIR$/Pytorch Implementations/A2CMulti/a2c_multi.py" />
+      <change beforePath="$PROJECT_DIR$/Pytorch Implementations/A3C/a3c_worker.py" afterPath="$PROJECT_DIR$/Pytorch Implementations/A3C/a3c_worker.py" />
+      <change beforePath="$PROJECT_DIR$/Pytorch Implementations/DDPG/ddpg_agent.py" afterPath="$PROJECT_DIR$/Pytorch Implementations/DDPG/ddpg_agent.py" />
+      <change beforePath="$PROJECT_DIR$/Pytorch Implementations/TRPO/trpo_main.py" afterPath="$PROJECT_DIR$/Pytorch Implementations/TRPO/trpo_main.py" />
+    </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -11,13 +17,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="application.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="application.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Pytorch Implementations/application.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="39">
-              <caret line="27" column="37" lean-forward="false" selection-start-line="27" selection-start-column="37" selection-end-line="27" selection-end-column="37" />
+            <state relative-caret-position="144">
+              <caret line="34" column="40" lean-forward="true" selection-start-line="34" selection-start-column="40" selection-end-line="34" selection-end-column="40" />
               <folding>
                 <element signature="e#24#34#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="a2c.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Pytorch Implementations/A2C/a2c.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1397">
+              <caret line="161" column="0" lean-forward="true" selection-start-line="161" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
+              <folding>
+                <element signature="e#15#46#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -44,6 +62,7 @@
       <find>_print_environment_info</find>
       <find>select_action</find>
       <find>_reverse_episode_storage_buffers</find>
+      <find>_update_network_parameters</find>
     </findStrings>
     <replaceStrings>
       <replace>_running_mean</replace>
@@ -61,6 +80,7 @@
       <replace>_update_network_parameters</replace>
       <replace>num_days_after_which_to_process_info</replace>
       <replace>_select_action</replace>
+      <replace>_optimize_model</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -104,11 +124,11 @@
         <option value="$PROJECT_DIR$/Pytorch Implementations/DDPG/utils.py" />
         <option value="$PROJECT_DIR$/Pytorch Implementations/DDPG/critic_network.py" />
         <option value="$PROJECT_DIR$/Pytorch Implementations/DQN/dqn_agent.py" />
-        <option value="$PROJECT_DIR$/Pytorch Implementations/A2C/a2c.py" />
         <option value="$PROJECT_DIR$/Pytorch Implementations/A3C/shared_optimizer.py" />
         <option value="$PROJECT_DIR$/Pytorch Implementations/A3C/shared_network.py" />
         <option value="$PROJECT_DIR$/Pytorch Implementations/application.py" />
         <option value="$PROJECT_DIR$/Pytorch Implementations/DDPG/ddpg_agent.py" />
+        <option value="$PROJECT_DIR$/Pytorch Implementations/A2C/a2c.py" />
       </list>
     </option>
   </component>
@@ -162,6 +182,17 @@
             <path>
               <item name="Deep Reinforcement Learning" type="b2602c69:ProjectViewProjectNode" />
               <item name="Deep Reinforcement Learning" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Deep Reinforcement Learning" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Deep Reinforcement Learning" type="462c0819:PsiDirectoryNode" />
+              <item name="Pytorch Implementations" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="Deep Reinforcement Learning" type="b2602c69:ProjectViewProjectNode" />
+              <item name="Deep Reinforcement Learning" type="462c0819:PsiDirectoryNode" />
+              <item name="Pytorch Implementations" type="462c0819:PsiDirectoryNode" />
+              <item name="A2C" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -372,6 +403,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1280" height="800" extended-state="0" />
+    <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32970026" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
@@ -379,7 +411,7 @@
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="R Packages" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Docker" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="R Graphics" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -564,14 +596,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/A2C/a2c.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="43">
-          <caret line="3" column="0" lean-forward="false" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Pytorch Implementations/A2CMulti/utils.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -684,10 +708,20 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Pytorch Implementations/application.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="39">
-          <caret line="27" column="37" lean-forward="false" selection-start-line="27" selection-start-column="37" selection-end-line="27" selection-end-column="37" />
+        <state relative-caret-position="144">
+          <caret line="34" column="40" lean-forward="true" selection-start-line="34" selection-start-column="40" selection-end-line="34" selection-end-column="40" />
           <folding>
             <element signature="e#24#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Pytorch Implementations/A2C/a2c.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1397">
+          <caret line="161" column="0" lean-forward="true" selection-start-line="161" selection-start-column="0" selection-end-line="161" selection-end-column="0" />
+          <folding>
+            <element signature="e#15#46#0" expanded="true" />
           </folding>
         </state>
       </provider>

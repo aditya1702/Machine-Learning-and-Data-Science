@@ -79,7 +79,7 @@ class A2C:
             # We optimize the model after collecting some amount of training data. This phase can also be called
             # the reflecting phase. The agent reflects on its previous actions to see which ones were good and which
             # ones were bad.
-            self._update_network_parameters()
+            self._optimize_model()
 
         if self.plot_environment_statistics:
             self._plot_environment_statistics()
@@ -101,7 +101,7 @@ class A2C:
         discrete_action = discrete_action_tensor.data[0]
         return discrete_action
 
-    def _update_network_parameters(self):
+    def _optimize_model(self):
         """
         This function optimizes the actor-critic neural network.
         """

@@ -101,7 +101,7 @@ class Ddpg:
 
                 self.replay_memory.append(self.Transition(state, action, next_state, reward, done))
 
-                self._update_network_parameters()
+                self._optimize_model()
 
                 if done:
                     self._save_reward_info(reward=self.total_reward_gained)
@@ -119,7 +119,7 @@ class Ddpg:
         action_clamped = action.data.clamp(-1, 1)
         return action_clamped
 
-    def _update_network_parameters(self):
+    def _optimize_model(self):
 
         if self.replay_memory.get_size() < self.ReplayMemorySize:
             return
