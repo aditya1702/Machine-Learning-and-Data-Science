@@ -17,3 +17,6 @@ class ReplayMemory():
 
     def get_size(self):
         return len(self.replay_memory)
+
+    def reset(self):
+        self.replay_memory = list()

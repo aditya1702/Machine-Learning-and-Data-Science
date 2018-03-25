@@ -1,11 +1,11 @@
 # coding=utf-8
 import matplotlib.pyplot as plt
 import torch
-import math
+import scipy
+from scipy import optimize
 from collections import namedtuple
 import numpy as np
-from torch.optim import Adam
-from torch import LongTensor
+from torch.autograd import Variable
 
 from .policy_network import PolicyNetwork
 from .value_network import ValueNetwork
@@ -20,10 +20,12 @@ class TRPO:
 
     LearningRate = 3e-3
     MaximumNumberOfEpisodes = 1000
-    MaximumNumberOfEpisodeSteps = 10000
+    MaximumNumberOfEpisodeSteps = 100
     Gamma = 0.95
     EntropyBeta = 0.0001
-    BatchSize = 10000
+    BatchSize = 100
+    Tau = 0.97
+    L2Regularization = 1e-2
 
     def __init__(self,
                  rl_environment,
@@ -106,50 +108,53 @@ class TRPO:
 
         # Randomly sample the played episode transitions from replay memory.
         batch_transitions = self.replay_memory.sample(self.BatchSize)
-
-        # Our batch_transitions are currently a list of Transition objects. Using zip(*) we convert it to a list
-        # containing tuples of all states, actions, next_states, rewards and done batches. It is of the form
-        # [(state_batch), (action_batch), (next_state_batch), (reward_batch), (done_batch)]
         transition_batch = zip(*batch_transitions)
-
-        # from_numpy() function of Pytorch takes a numpy array and so we convert the tuples to arrays using map()
-        # function.
         state_batch, action_batch, next_state_batch, reward_batch, done_batch = map(np.array, list(transition_batch))
-        print(state_batch)
+
+        # Convert each transition batches to Pytorch tensors
+        state_batch_tensor = self.utils.numpy_array_to_torch_tensor(np.array(state_batch))
+        action_batch_tensor = self.utils.numpy_array_to_torch_tensor(np.array(action_batch)).unsqueeze(1)
+        reward_batch_tensor = self.utils.numpy_array_to_torch_tensor(np.array(reward_batch))
+        done_batch_tensor = self.utils.numpy_array_to_torch_tensor(np.array(done_batch))
+        state_value_batch_tensor = self.value_network.get_state_value(state_batch_tensor)
+
+        returns_batch_tensor = torch.zeros(action_batch_tensor.size(0), 1)
+        deltas_batch_tensor = torch.zeros(action_batch_tensor.size(0), 1)
+        advantages_batch_tensor = torch.zeros(action_batch_tensor.size(0), 1)
+
+        previous_return = previous_delta = previous_advantage = 0
+        for index in reversed(range(reward_batch_tensor.size(0))):
+            returns_batch_tensor[index] = reward_batch_tensor.data[index] + self.Gamma * previous_return * done_batch_tensor.data[index]
+            deltas_batch_tensor[index] = reward_batch_tensor.data[index] + self.Gamma * previous_delta * done_batch_tensor.data[index] - state_value_batch_tensor.data[index]
+            advantages_batch_tensor[index] = deltas_batch_tensor[index] + self.Gamma * self.Tau * done_batch_tensor.data[index] * previous_advantage
+
+            previous_return = returns_batch_tensor[index, 0]
+            previous_delta = deltas_batch_tensor[index, 0]
+            previous_advantage = advantages_batch_tensor[index, 0]
+
+        target_batch_tensor = Variable(returns_batch_tensor)
+        flattened_params = self.utils.get_flattened_params_from_model(self.value_network).double().numpy()
+
+        def _calculate_value_loss(value_parameters):
+            flattened_params_tensor = self.utils.numpy_array_to_torch_tensor(np.array(value_parameters))
+            self.utils.set_flattened_params_to_model(self.value_network, flattened_params_tensor.data)
+            for param in self.value_network.parameters():
+                if param.grad is not None:
+                    param.grad.data.fill_(0)
+
+            state_value_batch_tensor = self.value_network.get_state_value(state_batch_tensor)
+            value_loss = (state_value_batch_tensor - target_batch_tensor).pow(2).mean()
+
+            # weight decay
+            for param in self.value_network.parameters():
+                value_loss += param.pow(2).sum() * self.L2Regularization
+            value_loss.backward()
+            value_loss_untensored = value_loss.data.double().numpy()[0]
+            flattened_params = self.utils.get_flattened_params_from_model(self.value_network).double().numpy()
+            return value_loss_untensored, flattened_params
+
+        flattened_params, _, opt_info = scipy.optimize.fmin_l_bfgs_b(_calculate_value_loss, flattened_params, maxiter = 25)
         s
-
-    def _get_total_loss(self):
-        """
-        The function calculates the total loss of the critic and the actor.
-        """
-
-        # We convert our episode buffers to pytorch tensors
-        state_batch_tensor = self.utils.numpy_array_to_torch_tensor(np.vstack(self.state_buffer))
-        action_batch_tensor = self.utils.numpy_array_to_torch_tensor(np.vstack(self.action_buffer), tensor_type = LongTensor)
-        target_batch_tensor = self.utils.numpy_array_to_torch_tensor(np.vstack(self.target_buffer))
-
-        action_probabilities_batch, current_state_value_batch = self.actor_critic_network.get_action_probs_and_state_value(state_batch_tensor)
-        action_log_probabilities_batch = action_probabilities_batch.log()
-        action_log_probabilities_based_on_previous_actions = action_log_probabilities_batch.gather(1, action_batch_tensor)
-
-        # Calculate the advantage from target value and the current state value given by the neural net
-        td_advantage_batch = target_batch_tensor - current_state_value_batch
-
-        # Calculate the entropies
-        entropy_batch = (action_probabilities_batch * action_log_probabilities_batch).sum(1).mean()
-
-        # Calculate the total loss - critic loss + action loss
-        value_loss = td_advantage_batch.pow(2).mean()
-        action_loss = -(action_log_probabilities_based_on_previous_actions * td_advantage_batch + self.EntropyBeta * entropy_batch).mean()
-        total_loss = value_loss + action_loss
-        return total_loss
-
-    def _reset_episode_storage_buffers(self):
-        """
-        The function resets the worker level storage buffers initialized earlier
-        """
-
-        self.state_buffer, self.action_buffer, self.reward_buffer, self.done_buffer, self.target_buffer = list(), list(), list(), list(), list()
 
     def _plot_environment_statistics(self):
 

@@ -22,7 +22,7 @@ class ValueNetwork(Module):
         self.dense_layer_2 = nn.Linear(self.NumberOfNeuronsFirstLayer, self.NumberOfNeuronsSecondLayer)
         self.critic_layer = nn.Linear(self.NumberOfNeuronsSecondLayer, self.state_value_dimensions)
 
-    def get_action_probs_and_state_value(self, state):
+    def get_state_value(self, state):
 
         output_of_dense_layer_1 = nn_func.tanh(self.dense_layer_1(state))
         output_of_dense_layer_2 = nn_func.tanh(self.dense_layer_2(output_of_dense_layer_1))
