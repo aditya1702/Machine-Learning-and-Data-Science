@@ -1,0 +1,822 @@
+{
+  "cells": [
+    {
+      "metadata": {
+        "_uuid": "1689133c4c27eb6faab640d7b1571d6a59de3a6a",
+        "_execution_state": "idle",
+        "trusted": true
+      },
+      "cell_type": "code",
+      "source": "## Importing packages\n\n# This R environment comes with all of CRAN and many other helpful packages preinstalled.\n# You can see which packages are installed by checking out the kaggle/rstats docker image: \n# https://github.com/kaggle/docker-rstats\n\nlibrary(tidyverse) # metapackage with lots of helpful functions\nlibrary(grid)\nlibrary(gridExtra)\n## Running code\n\n# In a notebook, you can run a single code cell by clicking in the cell and then hitting \n# the blue arrow to the left, or by clicking in the cell and pressing Shift+Enter. In a script, \n# you can run code by highlighting the code you want to run and then clicking the blue arrow\n# at the bottom of this window.\n\n## Reading in files\n\n# You can access files from datasets you've added to this kernel in the \"../input/\" directory.\n# You can see the files added to this kernel by running the code below. \n\nlist.files(path = \"../input\")\n\n## Saving data\n\n# If you save any files or images, these will be put in the \"output\" directory. You \n# can see the output directory by committing and running your kernel (using the \n# Commit & Run button) and then checking out the compiled version of your kernel.",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "6b7ac38cdfefb789e70e5211095505e0dd517a55"
+      },
+      "cell_type": "code",
+      "source": "train = read_csv('../input/train.csv')\ntest = read_csv('../input/test.csv')\nsub = read_csv('../input/sample_submission.csv')",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "dfecbd8a3d6955be2f7fd3ac6903843fb41f54de"
+      },
+      "cell_type": "markdown",
+      "source": "# **Overall data statisics**"
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "scrolled": true,
+        "_uuid": "b77db072392202ae09dca98d8b4e260a1f3661ca"
+      },
+      "cell_type": "code",
+      "source": "head(train)",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "c461611b8438e4015bdbeb3b76eb1597e9969393"
+      },
+      "cell_type": "markdown",
+      "source": "Majority of columns in our data are categorical variables with a few of them numerical."
+    },
+    {
+      "metadata": {
+        "_uuid": "30216fcd4f022a8c622b29fe9cce10df4a1dfdf9"
+      },
+      "cell_type": "markdown",
+      "source": "# **Analyzing target**"
+    },
+    {
+      "metadata": {
+        "_uuid": "f676180d7b289e54ecf3695abd82dfe0f83e4635"
+      },
+      "cell_type": "markdown",
+      "source": "For ease of use, we change the labels of the target to their original labels."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "83925f6c5fc160b94167d52588c22376169896ba"
+      },
+      "cell_type": "code",
+      "source": "train$Target[train$Target == 1] = 'Extreme Poverty'\ntrain$Target[train$Target == 2] = 'Moderate Poverty'\ntrain$Target[train$Target == 3] = 'Vulnerable Household'\ntrain$Target[train$Target == 4] = 'Non-Vulnerable Household'",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "b7343c571d354b57503a2e85b92f5e6106368074"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(Target))+\ngeom_bar(color = 'black', fill = 'tomato')+\nxlab(\"Target Classes\")+\nylab(\"Target Classes Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "a0a7e8df7638f9b261418eded770a9ace788beeb"
+      },
+      "cell_type": "markdown",
+      "source": "It seems like majority of people in our train come from non-vulnerable households. And the least number comes from extreme poverty households."
+    },
+    {
+      "metadata": {
+        "_uuid": "dc4093b820ad6b14cb4c9f99bb0e202f25048c54"
+      },
+      "cell_type": "markdown",
+      "source": "# **Lets analyze the variables**"
+    },
+    {
+      "metadata": {
+        "_uuid": "54dd1d0890dd71f144b2506dd919d3c86651abd7"
+      },
+      "cell_type": "markdown",
+      "source": "## **1. Monthly Rent - v2a1**\nLogically, the monthly rent of the household can give us indications of the poverty of the household. Lets see what the graphs tell us."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "0e6aecf700218deb505f12df898e0ae5187c5176"
+      },
+      "cell_type": "code",
+      "source": "head(train$v2a1, 10)",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "1df4666f897bd7d8e8154b4808a67c37f1536bb8"
+      },
+      "cell_type": "markdown",
+      "source": "We look at the distribution of the monthly rent."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "b242355b108138bb83e7ea09c59935e1590741ff"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(v2a1))+\ngeom_histogram(fill = 'skyblue', color = 'black', bins = 100)+\nlabs(x = \"Monthly Rent\", y = \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "f37a42640f7f41dbb2082ebdd3f7fc939a470827"
+      },
+      "cell_type": "markdown",
+      "source": "We see that the distribution of the monthly rent is skewed towards left and there is an outlier value beyond 2000k. Lets look at the log-distribution."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "04d58ccbe62a8a09e2847f013983c8e46cfef312"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(log1p(v2a1)))+\ngeom_histogram(fill = 'skyblue', color = 'black', bins = 100)+\nlabs(x = \"Log Monthly Rent\", y = \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "ebcc29ef066a0da60020c10b94ae78c57c45c932"
+      },
+      "cell_type": "markdown",
+      "source": "So the log distribution of the montly rent is normally distributed, with outliers at x = 1."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "eb89a325b700014f66d49f156c66b8497f1c9a90"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(x = log1p(v2a1)))+\ngeom_histogram(colour = \"grey19\", fill = \"tomato3\", bins = 50)+ \nfacet_wrap(~Target, scales = \"free\", ncol = 3)+ \ntheme(axis.text.x = element_text(hjust = 1, size = 12))+\ntheme(strip.text = element_text(size = 10, face = \"bold\"))+\nlabs(title =\" Monthly Rent Payment by Target\", x = \"Monthly Rent\", y = \"Number of Instances\", size = 15)",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "ca711a446c25ffbbcb92c3e6f64053bd369209c6"
+      },
+      "cell_type": "markdown",
+      "source": "Seems like the households in extreme and moderate poverty also pay a high montly rent and infact similar to non-vulnerable households."
+    },
+    {
+      "metadata": {
+        "_uuid": "f43a37d618a6944c1aa19594a13443d64dd53157"
+      },
+      "cell_type": "markdown",
+      "source": "## **2. Overcrowding by bedrooms - hacdor**\nLets see how does overcrowding by bedrooms affect the household."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "a4728618d984fab38a679c73f3b087db30eaa54b"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(x = as.factor(hacdor)))+\ngeom_bar(color = 'black')+\nxlab(\"Whether Overcrowding by Bedrooms\")+\nylab(\"hacdor Count\")+\nscale_x_discrete(labels = c(\"No\", \"Yes\"))",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "7295add02c98fc00fc503041b60c55aa635516a1"
+      },
+      "cell_type": "markdown",
+      "source": "In majority of households, we dont have overcrowding by bedrooms."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "831d8aa51098510a04ae4c3bbfc2f33fa0ed0fe3"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(Target))+\ngeom_bar(aes(fill = as.factor(hacdor)), color = \"black\")+\ntheme(axis.text.x = element_text(angle = 45, hjust = 1, size = 9))+\nguides(fill = guide_legend(\"Whether overcrowding by bedrooms\"))",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "27a337691e209a120c414a24ee9024a7b2cb88ae"
+      },
+      "cell_type": "markdown",
+      "source": "So the overcrowding by bedrooms doesnt affect the class of the household. The number of households with overcrowding is the same in all the income types."
+    },
+    {
+      "metadata": {
+        "_uuid": "2daa09c7823775821dc07c337ffcc00f0f4c331b"
+      },
+      "cell_type": "markdown",
+      "source": "## **3. Number of rooms - rooms**"
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "720e8880e2c79c9291a40dbf3b71f224db0ef231"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(as.factor(rooms)))+\ngeom_bar(fill = 'maroon', color = 'black')+\nxlab(\"Number of rooms\")+\nylab(\"Count of rooms\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "65e229811d43a2171a151b7184e708fd8a1424e5"
+      },
+      "cell_type": "markdown",
+      "source": "Majority of our data consists of 5 rooms. But we will have to see target/household wise distribution."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "0da0af9768ca561f3b4203aa20c7d04258df0ac4"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(x = as.factor(rooms)))+\ngeom_bar(colour = \"grey19\", fill = \"yellow\")+\nfacet_wrap(~Target, scales = \"free\", ncol = 3)+ \ntheme(axis.text.x = element_text(hjust = 1, size = 12))+\ntheme(strip.text = element_text(size = 9, face = \"bold\"))+\nlabs(x = \"Number of rooms\", y = \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "12add9dc1f2ad013cb9da06f35c0247325533dfa"
+      },
+      "cell_type": "markdown",
+      "source": "We see that the number of rooms in a household varies with the income bracket of the household. In non-vulnerable households, the highest number of rooms if 5 whereas in extreme and moderate poverty households the number of rooms is maximum 4."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "17d5dfa720f006e1259ddc2479dc9e169d30701b"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(as.factor(rooms)))+\ngeom_bar(aes(fill = as.factor(Target)), color = \"black\")+\nlabs(x = \"Number of rooms\", y = \"Count\")+\nguides(fill = guide_legend(\"Household Type\"))",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "5d1ded2a2dcbc305e7a8301e39276784b4ac6b3c"
+      },
+      "cell_type": "markdown",
+      "source": "## **4. Refrigerator - refrig**\nLogically, poor households have low chances of having an item like a refrigerator. Lets see if this is the assumption or not"
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "1f2f11bb350e20933678b087f5b24e8bf5f298a4"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(x = as.factor(refrig)))+\ngeom_bar(colour = \"grey19\", fill = \"orange\")+\nfacet_wrap(~Target, scales = \"free\", ncol = 3)+ \ntheme(axis.text.x = element_text(hjust = 1, size = 10))+\ntheme(strip.text = element_text(size = 9, face = \"bold\"))+\nlabs(x = \"Owns a refrigerator or not?\", y = \"Count\")+\nscale_x_discrete(labels = c(\"No\", \"Yes\"))",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "6870d496f06ba60cc4f91f62abbec6e0c2c4bc73"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(as.factor(refrig)))+\ngeom_bar(aes(fill = as.factor(Target)), position = \"dodge\", color = \"black\")+\nlabs(x = \"Owns a refrigerator or not?\", y = \"Count\")+\nguides(fill = guide_legend('Household Type'))+\ntheme(axis.text.x = element_text(hjust = 1, size = 9))+\nscale_x_discrete(labels = c(\"No\", \"Yes\"))",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "6553f2bb83095abd48be325b5af78f361a1518c5"
+      },
+      "cell_type": "markdown",
+      "source": "Interesting! It seems that in low income households too there is a refrigerator.  Also, in the households where refrigerator is owned, non-vulnerable comes at the top followed by moderate and then vulnerable."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "facc60f1a02cdb7c0e62c7a57ba37785ecbd6587"
+      },
+      "cell_type": "markdown",
+      "source": "## 5. Owning a tablet - v18q, v18q1"
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "41dc2abb988f3d43e4292abf46cac36897a4f6df"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(x = as.factor(v18q)))+\ngeom_bar(colour = \"grey19\", fill = \"pink\")+\nfacet_wrap(~Target, scales = \"free\", ncol = 3)+ \ntheme(axis.text.x = element_text(hjust = 1, size = 10))+\ntheme(strip.text = element_text(size = 9, face = \"bold\"))+\nlabs(x = \"Owns a tablet or not?\", y = \"Count\")+\nscale_x_discrete(labels = c(\"No\", \"Yes\"))",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "2fb9c579884d26f44224c1798624eb19c7aeb264"
+      },
+      "cell_type": "markdown",
+      "source": "So, majority of the households do not own a tablet but many do. And the interesting thing is that people in extreme poverty households own a tablet! Lets look at how they fare when compared together."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "524242c7e6597675901cc3c908844b8bd2be474e"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(as.factor(v18q)))+\ngeom_bar(aes(fill = as.factor(Target)), position = \"dodge\", color = \"black\")+\nlabs(x = \"Owns a tablet or not?\", y = \"Count\")+\nguides(fill = guide_legend('Household Type'))+\ntheme(axis.text.x = element_text(hjust = 1, size = 9))+\nscale_x_discrete(labels = c(\"No\", \"Yes\"))",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "1215d0b257df0f2123e8afcb22c33bbe274d6c71"
+      },
+      "cell_type": "markdown",
+      "source": "Now lets look at the number of tablets owned by households which do own a tablet"
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "126eb93e7cc88aa9af9ce514921995db1a0ecab6"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nfilter(!is.na(v18q1)) %>%\nggplot(aes(as.factor(v18q1)))+\ngeom_bar(color = \"black\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "55e8a188b3a23b350178708f95cd43965af362fb"
+      },
+      "cell_type": "markdown",
+      "source": "So the maximum number of tablets owned is 1 but households do own 6 tablets. Lets dig deeper"
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "98bfcae5bdb9b0115333f54edec31e6349e645f5"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nfilter(!is.na(v18q1)) %>%\nggplot(aes(x = as.factor(v18q1)))+\ngeom_bar(colour = \"grey19\", fill = \"purple\")+\nfacet_wrap(~Target, scales = \"free\", ncol = 3)+ \ntheme(axis.text.x = element_text(hjust = 1, size = 10))+\ntheme(strip.text = element_text(size = 9, face = \"bold\"))+\nlabs(x = \"Number of tablets owned\", y = \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "642dac1975307ad3d7ec4cd24c4cdf97369a9126"
+      },
+      "cell_type": "markdown",
+      "source": "The most interesting thing is that households in extreme poverty own as many as 4 tablets! Infact moderate poverty households do not own 4 but a maximum of 3."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "6fc8fe55d1d963c9a893093a6269053a902f672e"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nfilter(!is.na(v18q1)) %>%\nggplot(aes(as.factor(v18q1)))+\ngeom_bar(aes(fill = as.factor(Target)), position = \"dodge\", color = \"black\")+\nlabs(x = \"Owns a tablet or not?\", y = \"Count\")+\nguides(fill = guide_legend('Household Type'))+\ntheme(axis.text.x = element_text(hjust = 1, size = 9))",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "6660d48b5ef13f54059065c7b40a243bc7571abf"
+      },
+      "cell_type": "markdown",
+      "source": "## **6. Male distribution - r4h1, r4h2, r4h3**"
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "0197034315332bc600f3f54931710e662badecd3"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(as.factor(r4h1)))+\ngeom_bar(color = \"black\", fill = \"grey19\", alpha = 0.5)+\nlabs(x = \"Number of males younger than 12\", \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "7feee2dc8ac795a1af55a1fc66abeed9ea597751"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(as.factor(r4h2)))+\ngeom_bar(color = \"black\", fill = \"darkblue\", alpha = 0.6)+\nlabs(x = \"Number of males older than 12\", \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "d129a438c685b358bde418692990682bcff08c15"
+      },
+      "cell_type": "markdown",
+      "source": "Lets analyze these variables' relationship with the target column"
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "4ad2092f8feeaa0fa880a9c2e164c7ed14b96d24"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(x = as.factor(Target)))+\ngeom_bar(colour = \"grey19\", fill = \"maroon\", alpha = 0.6)+\nfacet_wrap(~as.factor(r4h1), scales = \"free\", ncol = 3)+ \ntheme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))+\ntheme(strip.text = element_text(size = 9, face = \"bold\"))+\nlabs(title = \"Relation between number of males younger than 12 and Household Type\", x = \"Type of Household\", y = \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "ea9e679f8d24f4047213db9a52f59de062af36c9"
+      },
+      "cell_type": "markdown",
+      "source": "We see that the number of males younger than 12 are high in extreme poverty and non-vulnerable households. Lets do the same analysis for males older than 12."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "520843da4e19afd3771b2f80574aaab1753784f5"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(x = as.factor(Target)))+\ngeom_bar(colour = \"grey19\", fill = \"maroon\", alpha = 0.6)+\nfacet_wrap(~as.factor(r4h2), scales = \"free\", ncol = 3)+ \ntheme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))+\ntheme(strip.text = element_text(size = 9, face = \"bold\"))+\nlabs(title = \"Relation between number of males older than 12 and Household Type\", x = \"Type of Household\", y = \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "b1e5631dac3b37aa517b3a52183157f97dd4a734"
+      },
+      "cell_type": "markdown",
+      "source": "The number of data points concerning non-vulnerable households is very large. I will remove it and then analyse the same distribution to get a better idea of the low income households and comparing them."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "2474071b1c502ffb89a9c7dc5e7b5d3e5cebf8a1"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nfilter(Target != \"Non-Vulnerable Household\") %>%\nggplot(aes(as.factor(r4h2)))+\ngeom_bar(aes(fill = as.factor(Target)), position = \"dodge\", color = \"black\", alpha = 0.6)+\nlabs(x = \"Number of males older than 12\", y = \"Count\")+\nguides(fill = guide_legend('Household Type'))+\ntheme(axis.text.x = element_text(hjust = 1, size = 9))",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "d48768685d8ec0917dfa1c98b67e4f58fecb0009"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nfilter(Target != \"Non-Vulnerable Household\") %>%\nggplot(aes(as.factor(r4h1)))+\ngeom_bar(aes(fill = as.factor(Target)), position = \"dodge\", color = \"black\", alpha = 0.6)+\nlabs(x = \"Number of males younger than 12\", y = \"Count\")+\nguides(fill = guide_legend('Household Type'))+\ntheme(axis.text.x = element_text(hjust = 1, size = 9))",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "98ab0888ae6a503fe5cb92117dd9bbe6974388a9"
+      },
+      "cell_type": "markdown",
+      "source": "This reveals an interesting propert about the extreme poverty household. The number of males younger than 12 is high in extreme overty households but when it comes to older males, there are very few. Now lets analyze the total number of males in the household."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "4495cf866840499ce3383c755dd0fb7e2ff94f65"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(as.factor(r4h3)))+\ngeom_bar(color = \"black\", fill = \"gold\", alpha = 0.6)+\nlabs(x = \"Total Number of Males in the Household\", \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "118dd8f808cfce567d502316920d355b85f501f9"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(x = as.factor(r4h3)))+\ngeom_bar(colour = \"grey19\", fill = \"violet\", alpha = 0.6)+\nfacet_wrap(~as.factor(Target), scales = \"free\", ncol = 3)+ \ntheme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))+\ntheme(strip.text = element_text(size = 9, face = \"bold\"))+\nlabs(title = \"Relation between total number of males and Household Type\", x = \"Type of Household\", y = \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "b56129c438235be1bf46a9fcb9e403c2c4e82dd8"
+      },
+      "cell_type": "markdown",
+      "source": "The total number of males in an household appears to have roughly the same distribution. Maximum 1-2 males but in extreme poverty households, this exceeds upto 7."
+    },
+    {
+      "metadata": {
+        "_uuid": "7bc720733402bdff77f2e18f7ed8a00935f4cb0d"
+      },
+      "cell_type": "markdown",
+      "source": "## **7. Female distribution - r4m1, r4m2, r4m3**\nLets do the same analysis for female members as well."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "0197034315332bc600f3f54931710e662badecd3"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(as.factor(r4m1)))+\ngeom_bar(color = \"black\", fill = \"grey19\", alpha = 0.5)+\nlabs(x = \"Number of females younger than 12\", \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "7feee2dc8ac795a1af55a1fc66abeed9ea597751"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(as.factor(r4m2)))+\ngeom_bar(color = \"black\", fill = \"darkblue\", alpha = 0.6)+\nlabs(x = \"Number of females older than 12\", \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "d129a438c685b358bde418692990682bcff08c15"
+      },
+      "cell_type": "markdown",
+      "source": "Lets analyze these variables' relationship with the target column"
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "4ad2092f8feeaa0fa880a9c2e164c7ed14b96d24"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(x = as.factor(Target)))+\ngeom_bar(colour = \"grey19\", fill = \"maroon\", alpha = 0.6)+\nfacet_wrap(~as.factor(r4m1), scales = \"free\", ncol = 3)+ \ntheme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))+\ntheme(strip.text = element_text(size = 9, face = \"bold\"))+\nlabs(title = \"Relation between number of females younger than 12 and Household Type\", x = \"Type of Household\", y = \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "ea9e679f8d24f4047213db9a52f59de062af36c9"
+      },
+      "cell_type": "markdown",
+      "source": "We see that the number of females younger than 12 goes till 6. However, the number is high only in moderate poverty households. Also, on an average the number of females younger than 12 is 3 in extreme and moderate poverty households. This may be because on an average the non-vulnerable households do not have so many children."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "520843da4e19afd3771b2f80574aaab1753784f5"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(x = as.factor(Target)))+\ngeom_bar(colour = \"grey19\", fill = \"maroon\", alpha = 0.6)+\nfacet_wrap(~as.factor(r4m2), scales = \"free\", ncol = 3)+ \ntheme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))+\ntheme(strip.text = element_text(size = 9, face = \"bold\"))+\nlabs(title = \"Relation between number of females older than 12 and Household Type\", x = \"Type of Household\", y = \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "d7d3dc678260c2090f40e986f978792f80c82078"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot()+\ngeom_bar(aes(x = as.factor(r4m1)), colour = \"grey19\", fill = \"orange\", alpha = 0.6)+\ngeom_bar(aes(x = as.factor(r4m2)), colour = \"grey19\", fill = \"green\", alpha = 0.3)+\nfacet_wrap(~as.factor(Target), scales = \"free\", ncol = 3)+ \ntheme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))+\ntheme(strip.text = element_text(size = 9, face = \"bold\"))+\nlabs(title = \"Relation between number of females of different ages and Household Type\", x = \"Type of Household\", y = \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "b1e5631dac3b37aa517b3a52183157f97dd4a734"
+      },
+      "cell_type": "markdown",
+      "source": "In the above graph, green corresponds to females older than 12 and orange to females younger than 12. Most households do not have females younger than 12. But when it comes to older than 12, majority of them have 1. In extreme poverty households, this number goes till 5 and in non-vulnerable it goes till 6 but very very few."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "2474071b1c502ffb89a9c7dc5e7b5d3e5cebf8a1"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nfilter(Target != \"Non-Vulnerable Household\") %>%\nggplot(aes(as.factor(r4m2)))+\ngeom_bar(aes(fill = as.factor(Target)), position = \"dodge\", color = \"black\", alpha = 0.6)+\nlabs(x = \"Number of females older than 12\", y = \"Count\")+\nguides(fill = guide_legend('Household Type'))+\ntheme(axis.text.x = element_text(hjust = 1, size = 9))",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "d48768685d8ec0917dfa1c98b67e4f58fecb0009"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nfilter(Target != \"Non-Vulnerable Household\") %>%\nggplot(aes(as.factor(r4m1)))+\ngeom_bar(aes(fill = as.factor(Target)), position = \"dodge\", color = \"black\", alpha = 0.6)+\nlabs(x = \"Number of females younger than 12\", y = \"Count\")+\nguides(fill = guide_legend('Household Type'))+\ntheme(axis.text.x = element_text(hjust = 1, size = 9))",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "98ab0888ae6a503fe5cb92117dd9bbe6974388a9"
+      },
+      "cell_type": "markdown",
+      "source": "Moderate poverty households seems to dominate between the 3. When it comes to females younger than 12, only moderate poverty household is present"
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "4495cf866840499ce3383c755dd0fb7e2ff94f65"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(as.factor(r4m3)))+\ngeom_bar(color = \"black\", fill = \"gold\", alpha = 0.6)+\nlabs(x = \"Total Number of Females in the Household\", \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "c61e45b4d279c5440be29e3a79c1e15c56bfea7b"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(x = as.factor(r4m3)))+\ngeom_bar(colour = \"grey19\", fill = \"violet\", alpha = 0.6)+\nfacet_wrap(~as.factor(Target), scales = \"free\", ncol = 3)+ \ntheme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))+\ntheme(strip.text = element_text(size = 9, face = \"bold\"))+\nlabs(title = \"Relation between total number of females and Household Type\", x = \"Type of Household\", y = \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "24b642514dcc596f0d15f605da4e2c0b0a3e34c2"
+      },
+      "cell_type": "markdown",
+      "source": "## **8. Person distribution - r4t1, r4t2, r4t3**"
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "0197034315332bc600f3f54931710e662badecd3"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(as.factor(r4t1)))+\ngeom_bar(color = \"black\", fill = \"grey19\", alpha = 0.5)+\nlabs(x = \"Number of persons younger than 12\", \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "7feee2dc8ac795a1af55a1fc66abeed9ea597751"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(as.factor(r4t2)))+\ngeom_bar(color = \"black\", fill = \"darkblue\", alpha = 0.6)+\nlabs(x = \"Number of persons older than 12\", \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "d129a438c685b358bde418692990682bcff08c15"
+      },
+      "cell_type": "markdown",
+      "source": "Lets analyze these variables' relationship with the target column"
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "520843da4e19afd3771b2f80574aaab1753784f5"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot()+\ngeom_bar(aes(as.factor(r4t1)), colour = \"grey19\", fill = \"yellow\", alpha = 0.4)+\nfacet_wrap(~as.factor(Target), scales = \"free\", ncol = 3)+ \ntheme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))+\ntheme(strip.text = element_text(size = 9, face = \"bold\"))+\nlabs(title = \"Relation between number of persons younger than 12 and Household Type\", x = \"Type of Household\", y = \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "ab2e8d4e33b6be98eaa3f63ea775a18347cc8b91"
+      },
+      "cell_type": "markdown",
+      "source": "A pattern is there - non-vulnerable and vulnerable have in general low number of persons younger than 12. But in extreme poverty and moderate poverty households, the number of persons younger than 12 is large with as many as 7 persons! Lets see how many persons are there older than 12."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "4f6054565f5612468756a865cac951b7b775bf07"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot()+\ngeom_bar(aes(as.factor(r4t2)), colour = \"grey19\", fill = \"red\", alpha = 0.4)+\nfacet_wrap(~as.factor(Target), scales = \"free\", ncol = 3)+ \ntheme(axis.text.x = element_text(angle = 45, hjust = 1, size = 8))+\ntheme(strip.text = element_text(size = 9, face = \"bold\"))+\nlabs(title = \"Relation between number of persons older than 12 and Household Type\", x = \"Type of Household\", y = \"Count\")",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "b1e5631dac3b37aa517b3a52183157f97dd4a734"
+      },
+      "cell_type": "markdown",
+      "source": "Here the pattern is reversed - the number of persons older than 12 are higer in non-vulnerable and vulnerable households than extreme and moderate poverty ones."
+    },
+    {
+      "metadata": {
+        "_uuid": "3a0acf0cdb37b680614a5356780142631301ad66"
+      },
+      "cell_type": "markdown",
+      "source": "Lets check how many persons stay in a room and comparisons across all the household types."
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "e6ae77242a47414be40f232c09624712c47918f2"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nmutate(\n    mean_number_of_persons_per_room = r4t3/rooms\n) %>%\nggplot(aes(x = mean_number_of_persons_per_room))+\ngeom_histogram(colour = \"grey19\", fill = \"tomato3\", bins = 30, alpha = 0.5)+ \nfacet_wrap(~Target, scales = \"free\", ncol = 3)+ \ntheme(axis.text.x = element_text(hjust = 1, size = 12))+\ntheme(strip.text = element_text(size = 10, face = \"bold\"))+\nlabs(title =\" Mean Number of Persons vs Rooms\", x = \"Mean number of persons\", y = \"Count\", size = 15)",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "f748275340e3a5a1ed2b5715881146f269bf4ec0"
+      },
+      "cell_type": "markdown",
+      "source": "We see that in poor households there are more number of people per rooms. Infact the number of persons per room goes till 6 in extreme poverty households. For non-vulnerable and vulnerable this figure is less."
+    },
+    {
+      "metadata": {
+        "_uuid": "01d535299efa1966e53f8fd5466c3fd605fd257d"
+      },
+      "cell_type": "markdown",
+      "source": "## **9. Schooling - escolari, rez_esc**"
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "1011204d23c0a59055e3d81238c0195c431f1922"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nggplot(aes(as.factor(escolari)))+\ngeom_bar(fill = 'orange', color = 'black')",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "6a9dc95e5c88276a408a218630f2e43c6f49a070"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nfilter(Target == \"Extreme Poverty\") %>%\nggplot(aes(x = as.factor(Target), stat = 'bin', fill = as.factor(escolari)))+\ngeom_bar(position = 'fill', color = 'black')+\ncoord_polar(\"y\")+\nlabs(x = \"\", y = \"\")+\nguides(fill = guide_legend(\"Number of years of schooling\"))",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "e237ae3c3ce25e00d1beabed4960a590f112472c"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nfilter(Target == \"Moderate Poverty\") %>%\nggplot(aes(x = as.factor(Target), stat = 'bin', fill = as.factor(escolari)))+\ngeom_bar(position = 'fill', color = 'black')+\ncoord_polar(\"y\")+\nlabs(x = \"\", y = \"\")+\nguides(fill = guide_legend(\"Number of years of schooling\"))",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "c49e49ededcb85651b2c2f7394ed432ceef1fa80"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nfilter(Target == \"Vulnerable Household\") %>%\nggplot(aes(x = as.factor(Target), stat = 'bin', fill = as.factor(escolari)))+\ngeom_bar(position = 'fill', color = 'black')+\ncoord_polar(\"y\")+\nlabs(x = \"\", y = \"\")+\nguides(fill = guide_legend(\"Number of years of schooling\"))",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "723cd8b493c4d09c9836862b7d7a2d289f08f7a9"
+      },
+      "cell_type": "code",
+      "source": "train %>%\nfilter(Target == \"Non-Vulnerable Household\") %>%\nggplot(aes(x = as.factor(Target), stat = 'bin', fill = as.factor(escolari)))+\ngeom_bar(position = 'fill', color = 'black')+\ncoord_polar(\"y\")+\nlabs(x = \"\", y = \"\")+\nguides(fill = guide_legend(\"Number of years of schooling\"))",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "metadata": {
+        "_uuid": "37b7ea4c44ca1e71f1c29f1ce223564e88ef7d9d"
+      },
+      "cell_type": "markdown",
+      "source": "We see that the majority of people in extreme poverty households have 0 years in schooling. As we gradually progress towards non-vulnerable household, this pattern reverses. Very few people have 0 years experience in schooling and many have 17 years of schooling. This pattern was logically expected."
+    },
+    {
+      "metadata": {
+        "_uuid": "17f452dc1ee3e7d87c0df27b1ab5f8593e81d974"
+      },
+      "cell_type": "markdown",
+      "source": "# **Stay tuned for more! And do upvote if you like this kernel! :)**"
+    },
+    {
+      "metadata": {
+        "trusted": true,
+        "_uuid": "a61b0b9fe10b0a78efec7157626e0fc9df3ddb3d"
+      },
+      "cell_type": "code",
+      "source": "",
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "R",
+      "language": "R",
+      "name": "ir"
+    },
+    "language_info": {
+      "mimetype": "text/x-r-source",
+      "name": "R",
+      "pygments_lexer": "r",
+      "version": "3.4.2",
+      "file_extension": ".r",
+      "codemirror_mode": "r"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 1
+}
