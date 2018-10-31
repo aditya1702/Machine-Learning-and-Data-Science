@@ -2,6 +2,9 @@
 import sys
 from collections import namedtuple
 import logging
+
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 import numpy as np
@@ -104,14 +107,15 @@ class Ddpg:
                     self._save_reward_info(reward=self.total_reward_gained)
                     break
                 state = next_state
-            print(self.total_reward_gained)
+            print("Episode - " + str(self.current_episode_number) + "    " + "Reward - " + str(self.total_reward_gained))
 
         if self.plot_environment_statistics:
             self._plot_environment_statistics()
 
     def _select_action(self, state):
-        state_tensor = self.utils.numpy_array_to_torch_tensor(np.array(state))
-        action = self.actor.get_action(Variable(state_tensor, volatile = True))
+        state_pytorch_variable = self.utils.numpy_array_to_torch_tensor(np.array(state))
+        state_pytorch_variable.volatile = True
+        action = self.actor.get_action(state_pytorch_variable)
         action += self.exploration_process.sample(n = 1)[1]
         action_clamped = action.data.clamp(-1, 1)
         return action_clamped
@@ -164,6 +168,23 @@ class Ddpg:
 
     def _save_reward_info(self, reward):
         self.reward_per_episode[self.current_episode_number] = reward
+
+    def test_agent(self, rl_environment):
+
+        state = rl_environment.reset()
+        while True:
+            action = self._select_action(state)
+            rl_environment.render()
+            next_state, reward, done, info = rl_environment.step(action)
+
+            reward = max(-1.0, min(reward, 1.0))
+            self.total_reward_gained += reward
+
+            if done:
+                self._save_reward_info(reward = self.total_reward_gained)
+                break
+            state = next_state
+        print(self.total_reward_gained)
 
     def _plot_environment_statistics(self):
         total_episodes = list(self.reward_per_episode.keys())

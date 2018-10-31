@@ -1,5 +1,9 @@
 # coding=utf-8
+
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+
 import torch
 import numpy as np
 from torch.optim import Adam
@@ -13,7 +17,7 @@ class A2C:
 
     LearningRate = 3e-3
     MaximumNumberOfEpisodes = 1000
-    MaximumNumberOfEpisodeSteps = 20
+    MaximumNumberOfEpisodeSteps = 100
     Gamma = 0.95
     EntropyBeta = 0.0001
 
@@ -72,7 +76,7 @@ class A2C:
                 state = next_state
                 if done:
                     state = self.rl_environment.reset()
-                    print(self.total_reward_gained)
+                    print("Episode - " + str(self.episode_counter) + "    " + "Reward - " + str(self.total_reward_gained))
                     self.reward_per_episode[self.episode_counter] = self.total_reward_gained
                     self.episode_counter += 1
 
@@ -172,6 +176,23 @@ class A2C:
         """
 
         self.state_buffer, self.action_buffer, self.reward_buffer, self.done_buffer, self.target_buffer = list(), list(), list(), list(), list()
+
+    def test_agent(self, rl_environment):
+
+        state = rl_environment.reset()
+        while True:
+            action = self._select_action(state)
+            rl_environment.render()
+            next_state, reward, done, info = rl_environment.step(action)
+
+            reward = max(-1.0, min(reward, 1.0))
+            self.total_reward_gained += reward
+
+            if done:
+                self._save_reward_info(reward = self.total_reward_gained)
+                break
+            state = next_state
+        print(self.total_reward_gained)
 
     def _plot_environment_statistics(self):
 

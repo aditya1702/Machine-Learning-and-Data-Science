@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import gym
-# from DQN.dqn_agent import DqnAgent
+
+from DQN.dqn_agent import DqnAgent
 from DDPG.ddpg_agent import Ddpg
 from A3C.a3c_main import A3CMain
 from A2C.a2c import A2C
@@ -58,7 +59,8 @@ class RLApplication():
             agent = TRPO(rl_environment = rl_environment,
                          plot_environment_statistics = self.plot_environment_statistics)
         agent.train(rl_environment)
+        agent.test_agent(rl_environment)
 
 if __name__ == "__main__":
-    app = RLApplication(agent_name = "trpo")
+    app = RLApplication(agent_name = "dqn")
     app.run()
