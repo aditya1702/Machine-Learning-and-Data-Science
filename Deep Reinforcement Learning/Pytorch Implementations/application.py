@@ -34,7 +34,7 @@ class RLApplication():
     def run(self):
         global agent, rl_environment
         if self.agent_name == self.DqnAgentNameString:
-            rl_environment = gym.make('CartPole-v0').env
+            rl_environment = gym.make('CartPole-v0').unwrapped
             agent = DqnAgent(rl_environment = rl_environment,
                              plot_environment_statistics = self.plot_environment_statistics)
         elif self.agent_name == self.DdpgAgentNameString:
