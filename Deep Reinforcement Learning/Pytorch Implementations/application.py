@@ -58,6 +58,7 @@ class RLApplication():
             rl_environment = gym.make("Pendulum-v0").unwrapped
             agent = TRPO(rl_environment = rl_environment,
                          plot_environment_statistics = self.plot_environment_statistics)
+
         agent.train(rl_environment)
         agent.test_agent(rl_environment)
 

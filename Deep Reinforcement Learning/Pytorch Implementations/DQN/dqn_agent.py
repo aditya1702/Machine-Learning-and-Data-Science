@@ -6,15 +6,20 @@ from collections import namedtuple
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+from matplotlib import animation
+# from IPython.display import display
+# from JSAnimation.IPython_display import display_animation
 
 import numpy as np
+import torch
 import torch.nn.functional as nn_func
 import torch.optim as optimizers
-from torch.autograd import Variable
+from time import sleep
 
 from .dqn_agent_network import DqnAgentNetwork
 from .replay_memory import ReplayMemory
 from .utils import Utils
+# from moviepy.editor import ImageSequenceClip
 
 
 class DqnAgent:
@@ -22,19 +27,16 @@ class DqnAgent:
     Transition = namedtuple('Transition', ('state', 'action', 'next_state', 'reward', 'done'))
 
     # Initialize learning rate and optimizer parameters
-    Gamma = 0.99
-    LearningFreq = 4
-    TargetUpdateFreq = 20
-    LearningRate = 0.00025
-    Alpha = 0.95
-    Eps = 0.01
+    Gamma = 0.75
+    TargetUpdateFreq = 10
+    LearningRate = 0.001
     EpsStart = 0.9
     EpsEnd = 0.05
     EpsDecay = 200
-    BatchSize = 32
+    BatchSize = 64
 
-    ReplayMemorySize = 300
-    DefaultNumberOfEpisodes = 700
+    ReplayMemorySize = 10000
+    DefaultNumberOfEpisodes = 2000
     DefaultNumberOfDaysToPrint = 1
 
     def __init__(self,
@@ -63,12 +65,11 @@ class DqnAgent:
         if self.target_agent is None:
             self.target_agent = DqnAgentNetwork(rl_environment)
             self.target_agent.initialize_network()
+        self.target_agent.load_state_dict(self.model.state_dict())
+        self.target_agent.eval()
 
         # Initialize optimizer
-        self.optimizer = optimizers.RMSprop(self.model.parameters(),
-                                            lr = self.LearningRate,
-                                            alpha = self.Alpha,
-                                            eps = self.Eps)
+        self.optimizer = optimizers.Adam(self.model.parameters(), self.LearningRate)
 
         # Initialize Replay Memory
         self.replay_memory = ReplayMemory()
@@ -85,14 +86,22 @@ class DqnAgent:
         for episode_number in range(self.number_of_episodes):
             self.total_reward_gained = 0
             self.current_episode_number = episode_number
+            episode_steps = 0
 
             state = rl_environment.reset()
             while True:
                 action = self._select_action(state)
-                next_state, reward, done, info = rl_environment.step(action)
+                next_state, reward, done, _ = rl_environment.step(action)
 
+                # negative reward when attempt ends
+                if done:
+                    if episode_steps < 30:
+                        reward -= 10
+                    else:
+                        reward = -1
+                if episode_steps > 100 or episode_steps > 200 or episode_steps > 300:
+                    reward += 1
                 self.total_reward_gained += reward
-                # print(self.total_reward_gained)
 
                 self.replay_memory.append(self.Transition(state, action, next_state, reward, done))
 
@@ -102,7 +111,8 @@ class DqnAgent:
                     self._save_reward_info(reward = self.total_reward_gained)
                     break
                 state = next_state
-            print("Episode - " + str(episode_number) + "    " + "Reward - " + str(self.total_reward_gained))
+                episode_steps += 1
+            print("Episode - " + str(episode_number+1) + "    " + "Reward - " + str(self.total_reward_gained))
 
         if self.plot_environment_statistics:
             self._plot_environment_statistics()
@@ -113,8 +123,8 @@ class DqnAgent:
         self.number_of_steps_taken += 1
 
         if random_number > eps_threshold:
-            state_pytorch_variable = self.utils.numpy_array_to_torch_tensor(np.array(state)).unsqueeze(0)
-            state_pytorch_variable.volatile = True
+            with torch.no_grad():
+                state_pytorch_variable = self.utils.numpy_array_to_torch_tensor(np.array(state)).unsqueeze(0)
             state_action_values = self.model.get_state_action_values(state_pytorch_variable)
             state_action_values = state_action_values.data[0].numpy()
             discrete_greedy_action = np.argmax(state_action_values)
@@ -145,8 +155,8 @@ class DqnAgent:
         current_state_values_based_on_selected_actions = current_state_action_values.gather(1, action_batch_tensor)
 
         # Calculate the next-state values for the agent to converge to. For the target values, we always select the greedy action.
-        next_state_action_values = self.target_agent.get_state_action_values(next_state_batch_tensor)
-        next_state_action_values.volatile = False
+        with torch.no_grad():
+            next_state_action_values = self.target_agent.get_state_action_values(next_state_batch_tensor)
         next_state_values_based_on_greedy_action = not_done_batch_tensor * next_state_action_values.max(1)[0]
 
         # Calculate the td-target
@@ -171,19 +181,37 @@ class DqnAgent:
     def test_agent(self, rl_environment):
 
         state = rl_environment.reset()
+        image_frames = []
+        episode_steps = 0
         while True:
-            action = self._select_action(state)
-            rl_environment.render()
-            next_state, reward, done, info = rl_environment.step(action)
+            sleep(0.1)
+            frame = rl_environment.render(mode = 'rgb_array')
+            image_frames.append(frame)
 
-            reward = max(-1.0, min(reward, 1.0))
-            self.total_reward_gained += reward
+            action = self._select_action(state)
+            next_state, reward, done, info = rl_environment.step(action)
 
             if done:
                 self._save_reward_info(reward = self.total_reward_gained)
                 break
             state = next_state
-        print(self.total_reward_gained)
+
+        self._display_frames_as_gif(image_frames, filename_gif = 'dqn.gif')
+
+    def _display_frames_as_gif(self, frames, filename_gif = None):
+        """
+        Displays a list of frames as a gif, with controls
+        """
+
+        plt.figure(figsize = (frames[0].shape[1] / 72.0, frames[0].shape[0] / 72.0), dpi = 72)
+        patch = plt.imshow(frames[0])
+        plt.axis('off')
+
+        def animate(i):
+            patch.set_data(frames[i])
+
+        anim = animation.FuncAnimation(plt.gcf(), animate, frames = len(frames), interval = 50)
+        if filename_gif: anim.save('/Users/adityavyas/Desktop/' + filename_gif, writer = 'imagemagick', fps = 20)
 
     def _plot_environment_statistics(self):
         total_episodes = list(self.reward_per_episode.keys())
