@@ -1,14 +1,14 @@
 # coding=utf-8
 import math
 import random
+import json
+import subprocess
 from collections import namedtuple
 
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 from matplotlib import animation
-# from IPython.display import display
-# from JSAnimation.IPython_display import display_animation
 
 import numpy as np
 import torch
@@ -19,7 +19,6 @@ from time import sleep
 from .dqn_agent_network import DqnAgentNetwork
 from .replay_memory import ReplayMemory
 from .utils import Utils
-# from moviepy.editor import ImageSequenceClip
 
 
 class DqnAgent:
@@ -75,6 +74,17 @@ class DqnAgent:
         self.replay_memory = ReplayMemory()
 
         self.utils = Utils()
+
+        gui_code = subprocess.call(["python", "gui.py"])
+        s
+        
+        with open("./params.json", "r") as infile:
+            params_dict = json.load(infile)
+
+        self.Gamma = params_dict['Gamma']
+        self.LearningRate = params_dict['Learning Rate']
+        self.number_of_episodes = int(params_dict['Episodes'])
+        self.BatchSize = int(params_dict['Batch Size'])
 
     def train(self, rl_environment):
         """
