@@ -1,0 +1,161 @@
+Grid Size, Rule Type, Iterations
+10,belief,18
+10,confidence,25
+10,belief with distance,73
+10,confidence with distance,75
+11,belief,12
+11,confidence,19
+11,belief with distance,160
+11,confidence with distance,162
+12,belief,25
+12,confidence,28
+12,belief with distance,222
+12,confidence with distance,127
+13,belief,28
+13,confidence,30
+13,belief with distance,209
+13,confidence with distance,128
+14,belief,42
+14,confidence,69
+14,belief with distance,95
+14,confidence with distance,226
+15,belief,80
+15,confidence,58
+15,belief with distance,322
+15,confidence with distance,151
+16,belief,30
+16,confidence,32
+16,belief with distance,150
+16,confidence with distance,263
+17,belief,37
+17,confidence,45
+17,belief with distance,221
+17,confidence with distance,263
+18,belief,31
+18,confidence,67
+18,belief with distance,390
+18,confidence with distance,144
+19,belief,71
+19,confidence,148
+19,belief with distance,318
+19,confidence with distance,348
+20,belief,84
+20,confidence,86
+20,belief with distance,599
+20,confidence with distance,322
+21,belief,176
+21,confidence,140
+21,belief with distance,429
+21,confidence with distance,496
+22,belief,81
+22,confidence,102
+22,belief with distance,381
+22,confidence with distance,468
+23,belief,133
+23,confidence,86
+23,belief with distance,433
+23,confidence with distance,704
+24,belief,139
+24,confidence,230
+24,belief with distance,770
+24,confidence with distance,263
+25,belief,185
+25,confidence,131
+25,belief with distance,699
+25,confidence with distance,221
+26,belief,130
+26,confidence,201
+26,belief with distance,528
+26,confidence with distance,458
+27,belief,298
+27,confidence,229
+27,belief with distance,422
+27,confidence with distance,723
+28,belief,141
+28,confidence,131
+28,belief with distance,694
+28,confidence with distance,747
+29,belief,101
+29,confidence,308
+29,belief with distance,716
+29,confidence with distance,749
+30,belief,324
+30,confidence,157
+30,belief with distance,1189
+30,confidence with distance,1038
+31,belief,191
+31,confidence,278
+31,belief with distance,910
+31,confidence with distance,823
+32,belief,252
+32,confidence,478
+32,belief with distance,622
+32,confidence with distance,812
+33,belief,356
+33,confidence,292
+33,belief with distance,745
+33,confidence with distance,918
+34,belief,369
+34,confidence,225
+34,belief with distance,955
+34,confidence with distance,1653
+35,belief,278
+35,confidence,528
+35,belief with distance,1201
+35,confidence with distance,1768
+36,belief,279
+36,confidence,616
+36,belief with distance,1723
+36,confidence with distance,487
+37,belief,222
+37,confidence,374
+37,belief with distance,844
+37,confidence with distance,1328
+38,belief,489
+38,confidence,290
+38,belief with distance,1128
+38,confidence with distance,925
+39,belief,336
+39,confidence,429
+39,belief with distance,2267
+39,confidence with distance,1015
+40,belief,445
+40,confidence,302
+40,belief with distance,1372
+40,confidence with distance,1621
+41,belief,591
+41,confidence,439
+41,belief with distance,1357
+41,confidence with distance,1859
+42,belief,599
+42,confidence,571
+42,belief with distance,2159
+42,confidence with distance,1623
+43,belief,304
+43,confidence,315
+43,belief with distance,1661
+43,confidence with distance,1989
+44,belief,433
+44,confidence,858
+44,belief with distance,1196
+44,confidence with distance,1831
+45,belief,255
+45,confidence,613
+45,belief with distance,2970
+45,confidence with distance,1398
+46,belief,380
+46,confidence,630
+46,belief with distance,1017
+46,confidence with distance,2269
+47,belief,177
+47,confidence,707
+47,belief with distance,4287
+47,confidence with distance,1083
+48,belief,460
+48,confidence,619
+48,belief with distance,1977
+48,confidence with distance,1264
+49,belief,1463
+49,confidence,446
+49,belief with distance,2454
+49,confidence with distance,3091

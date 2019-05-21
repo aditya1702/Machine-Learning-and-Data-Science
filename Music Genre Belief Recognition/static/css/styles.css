@@ -1,0 +1,145 @@
+html, body {
+    font-family: "Abel";
+    background: #13242f;
+    font-size: 20px;
+    overflow: hidden;
+}
+
+#container:before {
+    background-image: url("../img/background.jpg");
+    background-size: 100%;
+    position: absolute;
+    content: "";
+    z-index: 0;
+    opacity: 0.4;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+}
+
+#container:after {
+    position: absolute;
+    content: "";
+    z-index: 1;
+    opacity: 0.8;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+}
+
+.message {
+    width: 700px;
+    margin: auto;
+    color: white;
+    text-align: justify;
+}
+
+.message p {
+    margin: 8pt auto;
+}
+
+#message-wave {
+    display: none;
+}
+
+audio {
+    position: absolute;
+    z-index: 2;
+    right: 0;
+    top: 0;
+}
+
+#upload {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    margin: 60px auto;
+    max-width: 20%;
+    max-height: 20%;
+    z-index: 2;
+}
+
+#upload div {
+    width: 100%;
+    padding-bottom: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    background-color: #778899;
+}
+
+#upload img {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    max-width: 80%;
+    max-height: 80%;
+}
+
+#upload input {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    width: 80%;
+    height: 80%;
+}
+
+.modal {
+    display: none;
+    transition: background-color 1000ms linear;
+    opacity: 1;
+    margin: 50px 0;
+    height: 60%;
+}
+
+body.loading {
+    overflow: hidden;
+}
+
+body.loading .modal {
+    display: block;
+}
+
+#piechart-container {
+    z-index: 3;
+    width: 600px;
+    height: 500px;
+    display: none;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    margin-left: -300px;
+    margin-top: -250px;
+}
+
+#piechart {
+    position: relative;
+    width: 400px;
+    height: 450px;
+}
+
+#legend {
+    float: right;
+    margin-top: 15%;
+}
+
+#legend ul {
+    color: white;
+    font-size: 20pt;
+}
+
+#legend ul li span {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    border-radius: 2px;
+}

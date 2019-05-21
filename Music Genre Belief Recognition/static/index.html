@@ -1,0 +1,59 @@
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>CS543: Music Genre Recognition using Audio Samples</title>
+    <script src="https://code.jquery.com/jquery-2.2.2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@0.12.0"></script>
+    <script src="js/genres.js"></script>
+    <script src="js/utils.js"></script>
+    <script src="js/siriwave.js"></script>
+    <script src="js/sketch.min.js"></script>
+    <script src="js/pills.js"></script>
+    <script src="js/Chart.js"></script>
+    <script src="js/main.js"></script>
+    <link rel="stylesheet" href="css/reset.css">
+    <link href='https://fonts.googleapis.com/css?family=Abel' rel='stylesheet'>
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <link rel="shortcut icon" href="">
+</head>
+<body>
+    <div id="container">
+        <h1><font size='72' color='#F4A460'><center>Genre Belief Recognition using Convolutional Recurrent Neural Networks</center></font></h1>
+        <div id="message-upload" class="message">
+            <p><br><br><br>This website acts as a demo for the CS543: Massive Data Storage and Retrieval final project on music genre
+           recognition through audio samples. <br> We have used a CRNN end-to-end model to predict the genre belief in a song. The audio samples can be uploaded by the button given below. <br>
+           As the audio progresses, a visualization will be shown in terms of a Pie Chart, which will show
+           what our network believes the genre to be at any point of time.</p>
+        </div>
+        <div id="upload">
+            <form enctype="multipart/form-data">
+                <div>
+                    <img src="img/music-upload.png">
+                    <input name="filearg" type="file">
+                </div>
+            </form>
+        </div>
+        <div id="message-wave" class="message">
+            <p>Please wait while your song is being processed. Processing depends on the length of the song and you may have to wait for a few minutes if the file is large.</p>
+        </div>
+        <div id="wave" class="modal"></div>
+        <div id="pills"></div>
+        <div id="piechart-container">
+            <canvas id="piechart" height="450" width="400"></canvas>
+            <div id="legend">
+                <ul>
+                  <li><span style="background: #e47127;"></span> Electronic</li>
+                  <li><span style="background: #006865;"></span> Experimental</li>
+                  <li><span style="background: #4169e1;"></span> Folk</li>
+                  <li><span style="background: #f0e87d;"></span> Hip-Hop</li>
+                  <li><span style="background: #f1afa3;"></span> Instrumental</li>
+                  <li><span style="background: #66cdaa;"></span> International</li>
+                  <li><span style="background: #afc7ed;"></span> Pop</li>
+                  <li><span style="background: #b22222;"></span> Rock</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
