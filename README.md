@@ -18,12 +18,25 @@ This is a repository which contains all my work and experience with machine lear
 #### Code for the online ML competitions I participated in. This includes Kaggle competitions, Analytics Vidhya Competitions and some random datasets I worked on.
 
 ### [Statistics-101](https://github.com/aditya1702/Machine-Learning-and-Data-Science/tree/master/Statistics-101)
-#### 
+#### Important statistical algorithms implemented in R - Maximum Likelihood Estimator, Bayesian Parameter Estimator, Method of Moments etc..
 
 ### [Image Colorizer using Neural Networks](https://github.com/aditya1702/Machine-Learning-and-Data-Science/tree/master/Image%20Colorizer%20using%20Neural%20Networks)
+#### Using neural networks to colorise grayscale images. The neural network is written using only Numpy and Python.
+
 ### [Probablistic Search and Destroy](https://github.com/aditya1702/Machine-Learning-and-Data-Science/tree/master/Probablistic%20Search%20and%20Destroy)
+#### Use Bayesian Networks to create an agent for optimally searching a target within a simulated environment.
+
 ### [Minesweeper AI Bot](https://github.com/aditya1702/Machine-Learning-and-Data-Science/tree/master/Minesweeper%20AI%20Bot)
+#### Create an AI bot to play minesweeper at different difficulty levels. Written using Numpy, Python and Matplotlib.
+
 ### [Mazerunner - Analysing AI Search Algorithms](https://github.com/aditya1702/Machine-Learning-and-Data-Science/tree/master/Mazerunner%20-%20Analysing%20AI%20Search%20Algorithms)
+#### Analysis and comparison of different search algorithms - DFS, BFS and the A* algorithms. Visualisations are done using matplotlib to understand the working of each algorithm.
+
 ### [Music Genre Belief Recognition using Neural Networks](https://github.com/aditya1702/Machine-Learning-and-Data-Science/tree/master/Music%20Genre%20Belief%20Recognition%20using%20Neural%20Networks)
+#### Identify the genre of the song using direct audio files as input and a real-time web-based GUI tool to visualise it. The model identifies and predicts the changing genre of a song as it plays.
+
 ### [Deep Learning](https://github.com/aditya1702/Machine-Learning-and-Data-Science/tree/master/Deep%20Learning)
+#### Some small implementations of autoencoders, CNNs, RNNs using tensorflow.
+
 ### [Exploratory Data Analysis](https://github.com/aditya1702/Machine-Learning-and-Data-Science/tree/master/Exploratory%20Data%20Analysis)
+#### A detailed data analysis and visualisation of some random Kaggle datasets using R's tidyverse package.
