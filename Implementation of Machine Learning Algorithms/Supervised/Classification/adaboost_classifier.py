@@ -1,17 +1,11 @@
 import pandas as pd
 import numpy as np
 import math
-import statistics
 from sklearn.datasets import load_digits, load_iris, load_boston, load_breast_cancer
-from scipy.stats import multivariate_normal as mvn
 from sklearn.model_selection import train_test_split
-from graphviz import Digraph, Source, Graph
-from multiprocessing import cpu_count, Pool
 import sklearn
-from IPython.display import Math
-from sklearn.tree import export_graphviz
-from copy import deepcopy
-from sklearn.metrics import pairwise_distances
+from logistic_regression import LogisticRegression
+np.seterr(all = "ignore")
 
 
 class AdaboostClassifier():
@@ -37,6 +31,7 @@ class AdaboostClassifier():
     def fit(self, X, y):
         X = np.asarray(X)
         y = np.asarray(y)
+
         # Convert y to {-1, 1}
         y = self._convert_y(y)
 
@@ -50,7 +45,7 @@ class AdaboostClassifier():
         for time_step in range(self.n_estimators):
 
             # Use a weak classifier to fit on data
-            weak_classifier = LogisticRegression(solver = "sgd", epochs = 10)
+            weak_classifier = LogisticRegression(solver = "sgd", epochs = 5)
             weak_classifier.fit(X, y)
             pred = weak_classifier.predict(X)
 
@@ -81,4 +76,21 @@ class AdaboostClassifier():
         return true_preds
 
     def get_accuracy(self, y, y_hat):
-        return np.mean(y == y_hat)
+        return np.mean(y == y_hat)*100
+
+
+# Load data
+data = load_breast_cancer()
+X, y = data.data, data.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.1)
+
+# Fit model
+model = AdaboostClassifier(n_estimators = 500)
+model.fit(X_train, y_train)
+
+# Predict
+y_pred = model.predict(X_test)
+
+# Get accuracy
+score = model.get_accuracy(y_pred, y_test)
+print("Model Score = ", str(score))

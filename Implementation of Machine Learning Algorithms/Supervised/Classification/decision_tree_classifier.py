@@ -3,15 +3,10 @@ import numpy as np
 import math
 import statistics
 from sklearn.datasets import load_digits, load_iris, load_boston, load_breast_cancer
-from scipy.stats import multivariate_normal as mvn
 from sklearn.model_selection import train_test_split
 from graphviz import Digraph, Source, Graph
-from multiprocessing import cpu_count, Pool
-import sklearn
 from IPython.display import Math
 from sklearn.tree import export_graphviz
-from copy import deepcopy
-from sklearn.metrics import pairwise_distances
 
 
 class Node():
@@ -245,3 +240,20 @@ class DecisionTreeClassifier():
 
     def get_accuracy(self, y, y_hat):
         return np.mean(y == y_hat)*100
+
+
+# Load data
+data = load_breast_cancer()
+X, y = data.data, data.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.1)
+
+# Fit model
+model = DecisionTreeClassifier(max_depth = 3)
+model.fit(X_train, y_train)
+
+# Predict
+y_pred = model.predict(X_test)
+
+# Get accuracy
+score = model.get_accuracy(y_pred, y_test)
+print("Model Score = ", str(score))

@@ -1,17 +1,8 @@
 import pandas as pd
 import numpy as np
 import math
-import statistics
 from sklearn.datasets import load_digits, load_iris, load_boston, load_breast_cancer
-from scipy.stats import multivariate_normal as mvn
 from sklearn.model_selection import train_test_split
-from graphviz import Digraph, Source, Graph
-from multiprocessing import cpu_count, Pool
-import sklearn
-from IPython.display import Math
-from sklearn.tree import export_graphviz
-from copy import deepcopy
-from sklearn.metrics import pairwise_distances
 
 
 class Perceptron():
@@ -46,11 +37,28 @@ class Perceptron():
                 break
 
             self.prev_weights.append(self.w.copy())
-            self.prev_bias.append(copy(self.b))
+            self.prev_bias.append(self.b.copy())
             self.termination_steps += 1
 
     def predict(self, X):
         return np.sign(self.w @ X.T + self.b)[0]
 
     def get_accuracy(self, y, y_hat):
-        return sum(y == y_hat)*100/len(y)
+        return np.mean(y == y_hat)*100
+
+
+# Load data
+data = load_breast_cancer()
+X, y = data.data, data.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.1)
+
+# Fit model
+model = Perceptron()
+model.fit(X_train, y_train)
+
+# Predict
+y_pred = model.predict(X_test)
+
+# Get accuracy
+score = model.get_accuracy(y_pred, y_test)
+print("Model Score = ", str(score))
