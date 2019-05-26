@@ -39,4 +39,21 @@ class RidgeRegression():
         return predictions[0]
 
     def get_mse(self, y_true, y_pred):
-        return np.sum((y_true - y_pred)**2)/y_true.shape[0]
+        return np.mean((y_true - y_pred)**2)
+
+
+# Load data
+data = load_boston()
+X, y = data.data, data.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.1)
+
+# Fit model
+model = RidgeRegression()
+model.fit(X_train, y_train)
+
+# Predict
+y_pred = model.predict(X_test)
+
+# Get accuracy
+score = model.get_mse(y_pred, y_test)
+print("Model Score = ", str(score))

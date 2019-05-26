@@ -3,7 +3,6 @@ import numpy as np
 import math
 from sklearn.datasets import load_digits, load_iris, load_boston, load_breast_cancer
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import pairwise_distances
 
 
 class KNeighbours():
@@ -13,8 +12,8 @@ class KNeighbours():
         self.problem = problem
         self.prediction_functions = {'classify': self._top_k_votes,
                                      'regress': self._top_k_mean}
-        self.eval_functions = {'classify': self.get_accuracy,
-                               'regress': self.get_mse}
+        self.eval_functions = {'classify': self._get_accuracy,
+                               'regress': self._get_mse}
 
     def fit(self, X, y):
         self.X = np.asarray(X)
@@ -57,10 +56,10 @@ class KNeighbours():
         eval_func = self.eval_functions[self.problem]
         return eval_func(pred, y)
 
-    def get_accuracy(self, pred, y):
+    def _get_accuracy(self, pred, y):
         return np.mean(pred == y)*100
 
-    def get_mse(self, pred, y):
+    def _get_mse(self, pred, y):
         return np.mean((pred - y)**2)
 
 
@@ -77,5 +76,5 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 
 # Get accuracy
-score = model.get_accuracy(y_pred, y_test)
+score = model.evaluate(y_pred, y_test)
 print("Model Score = ", str(score))
