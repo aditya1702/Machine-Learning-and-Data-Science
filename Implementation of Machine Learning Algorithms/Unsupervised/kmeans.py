@@ -1,12 +1,8 @@
 import pandas as pd
 import numpy as np
 import math
-import statistics
 from sklearn.datasets import load_digits, load_iris, load_boston, load_breast_cancer
-from scipy.stats import multivariate_normal as mvn
 from sklearn.model_selection import train_test_split
-import sklearn
-from copy import deepcopy
 from sklearn.metrics import pairwise_distances
 
 
@@ -59,3 +55,17 @@ class KMeans():
 
     def predict(self, X):
         return self._assign_clusters(X)
+
+
+# Load data
+data = load_breast_cancer()
+X, y = data.data, data.target
+X_train, X_test = train_test_split(X, test_size = 0.1)
+
+# Fit model
+model = KMeans(k = 5)
+model.fit(X_train)
+
+# Predict
+y_pred = model.predict(X_test)
+print(y_pred)

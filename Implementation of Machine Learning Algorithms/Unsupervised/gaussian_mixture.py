@@ -5,14 +5,12 @@ import statistics
 from sklearn.datasets import load_digits, load_iris, load_boston, load_breast_cancer
 from scipy.stats import multivariate_normal as mvn
 from sklearn.model_selection import train_test_split
-import sklearn
-from copy import deepcopy
-from sklearn.metrics import pairwise_distances
+from kmeans import KMeans
 
 
 class GaussianMixtureModel():
 
-    def __init__(self, k = 5, max_iters = 100, random_seed = 42, reg_covar = 1e-6, verbose = True):
+    def __init__(self, k = 5, max_iters = 100, random_seed = 42, reg_covar = 1e-3, verbose = True):
         self.k = k # number of Gaussians
         self.max_iters = max_iters
         self.reg_covar = reg_covar
@@ -150,3 +148,17 @@ class GaussianMixtureModel():
                     self.mu, self.cov, n_samples_comp)])
         y = np.concatenate([np.full(sample, j, dtype = int) for j, sample in enumerate(n_samples_comp)])
         return X, y
+
+
+# Load data
+data = load_breast_cancer()
+X, y = data.data, data.target
+X_train, X_test = train_test_split(X, test_size = 0.1)
+
+# Fit model
+model = GaussianMixtureModel(k = 5)
+model.fit(X_train)
+
+# Predict
+y_pred = model.predict(X_test)
+print(y_pred)
