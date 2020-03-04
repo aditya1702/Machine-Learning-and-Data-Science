@@ -46,7 +46,8 @@ class AdaboostClassifier():
 
             # Use a weak classifier to fit on data
             weak_classifier = LogisticRegression(solver = "sgd", epochs = 5)
-            weak_classifier.fit(X, y)
+            X_weighted = self.weights[time_step].reshape(-1, 1) * X
+            weak_classifier.fit(X_weighted, y)
             pred = weak_classifier.predict(X)
 
             # Get weighted error
