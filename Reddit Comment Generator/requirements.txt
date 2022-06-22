@@ -1,6 +1,6 @@
 tensorflow==1.14.0
 pandas==0.24.2
-numpy==1.17.3
+numpy==1.22.0
 gpt-2-simple==0.6
 torch==0.4.1
 torchvision==0.2.1
